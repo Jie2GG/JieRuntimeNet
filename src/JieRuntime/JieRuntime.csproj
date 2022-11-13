@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<!--编译配置-->
+		<TargetFrameworks>netstandard2.1</TargetFrameworks>
+		<Platforms>AnyCPU</Platforms>
+		<AssemblyName>JieRuntime</AssemblyName>
+		<RootNamespace>JieRuntime</RootNamespace>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<LangVersion>10.0</LangVersion>
+
+		<!--NuGet配置-->
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>JieRuntime</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>JieGG</Authors>
+		<Company>JieGG</Company>
+		<Product>.NET扩展运行时</Product>
+		<Description>用于扩展.NET运行时的组件</Description>
+		<Copyright>Copyright © 2022 JieGG All rights reserved</Copyright>
+		<RepositoryType>git</RepositoryType>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	</PropertyGroup>
+
+	<!--资产配置-->
+	<ItemGroup>
+		<None Include="Assets\Build\**" Pack="True" PackagePath="build\" />
+		<None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
+		<None Include="..\..\README.md" Pack="True" PackagePath="\" />
+	</ItemGroup>
+</Project>
