@@ -31,7 +31,7 @@
 	<ItemGroup>
 		<None Include="Assets\Build\**" Pack="True" PackagePath="build\" />
 		<None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
-		<None Include="..\..\LOGO.jpg"  Pack="True" PackagePath="\" />
+		<None Include="..\..\LOGO.jpg" Pack="True" PackagePath="\" />
 		<None Include="..\..\README.md" Pack="True" PackagePath="\" />
 	</ItemGroup>
 
@@ -39,6 +39,7 @@
 	<ItemGroup>
 		<!--NuGet-->
 		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="7.0.0" />
+		<PackageReference Include="System.Reflection.DispatchProxy" Version="4.7.1" />
 		<PackageReference Include="System.Text.Json" Version="7.0.0" />
 		<ProjectReference Include="..\JieRuntime.IO\JieRuntime.IO.csproj" />
 		<!--项目依赖-->
