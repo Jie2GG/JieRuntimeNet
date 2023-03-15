@@ -12,7 +12,8 @@ namespace JieRuntime.Ini
     public class IniSection : IDictionary<string, IniValue>, IEquatable<IniSection>
     {
         #region --字段--
-        private readonly SortedList<string, IniValue> dict;
+        private readonly Dictionary<string, IniValue> dict;
+        private readonly List<string> keyIndex;
         #endregion
 
         #region --属性--
@@ -30,7 +31,7 @@ namespace JieRuntime.Ini
             {
                 if (!this.dict.ContainsKey (key))
                 {
-                    this.dict.Add (key, value);
+                    this.Add (key, value);
                 }
                 else
                 {
@@ -42,12 +43,12 @@ namespace JieRuntime.Ini
         /// <summary>
         /// 获取一个按排序顺序包含 <see cref="IniSection"/> 中的键的集合
         /// </summary>
-        public ICollection<string> Keys => this.dict.Keys;
+        public ICollection<string> Keys => this.keyIndex;
 
         /// <summary>
         /// 获得一个包含 <see cref="IniSection"/> 中的值的集合
         /// </summary>
-        public ICollection<IniValue> Values => this.dict.Values;
+        public ICollection<IniValue> Values => this.keyIndex.ConvertAll (c => this.dict[c]);
 
         /// <summary>
         /// 获取包含在 <see cref="IniSection"/> 中的键/值对的数目
@@ -67,27 +68,20 @@ namespace JieRuntime.Ini
 
         #region --构造函数--
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该示例为空且具有默认的初始容量，并使用默认的 <see cref="IComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该示例为空且具有默认的初始容量
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
-        /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
+        /// <exception cref="ArgumentException"><paramref name="name"/> 是 <see langword="null"/> 或 <paramref name="name"/> 是空字符串</exception>
         public IniSection (string name)
-        {
-            if (string.IsNullOrEmpty (name))
-            {
-                throw new ArgumentException ($"“{nameof (name)}”不能为 null 或空。", nameof (name));
-            }
-
-            this.Name = name;
-            this.dict = new SortedList<string, IniValue> ();
-        }
+            : this (name, 0)
+        { }
 
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该示例为空且具有指定的初始容量，并使用默认的 <see cref="IComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该示例为空且具有指定的初始容量
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
         /// <param name="capacity"><see cref="IniSection"/> 可包含的初始元素数</param>
-        /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
+        /// <exception cref="ArgumentException"><paramref name="name"/> 是 <see langword="null"/> 或 <paramref name="name"/> 是空字符串</exception>
         public IniSection (string name, int capacity)
         {
             if (string.IsNullOrEmpty (name))
@@ -96,77 +90,24 @@ namespace JieRuntime.Ini
             }
 
             this.Name = name;
-            this.dict = new SortedList<string, IniValue> (capacity);
+            this.dict = new Dictionary<string, IniValue> (capacity);
+            this.keyIndex = new List<string> (capacity);
         }
 
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例为空，具有默认的初始容量并使用指定的 <see cref="IComparer{T}"/>
-        /// </summary>
-        /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
-        /// <param name="comparer">比较键时要使用的 <see cref="IComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IComparer{T}"/></param>
-        /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
-        public IniSection (string name, IComparer<string> comparer)
-        {
-            if (string.IsNullOrEmpty (name))
-            {
-                throw new ArgumentException ($"“{nameof (name)}”不能为 null 或空。", nameof (name));
-            }
-
-            this.Name = name;
-            this.dict = new SortedList<string, IniValue> (comparer);
-        }
-
-        /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例包含从指定的 <see cref="IDictionary{TKey, TValue}"/> 中复制的元素，其容量足以容纳所复制的元素数并使用默认的 <see cref="IComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例包含从指定的 <see cref="IDictionary{TKey, TValue}"/> 中复制的元素，其容量足以容纳所复制的元素数
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
         /// <param name="dictionary"><see cref="IDictionary{TKey, TValue}"/>，它的元素被复制到新 <see cref="IniSection"/></param>
-        /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
+        /// <exception cref="ArgumentException"><paramref name="name"/> 是 <see langword="null"/> 或 <paramref name="name"/> 是空字符串</exception>
         public IniSection (string name, IDictionary<string, IniValue> dictionary)
+            : this (name, dictionary.Count)
         {
-            if (string.IsNullOrEmpty (name))
+            foreach (KeyValuePair<string, IniValue> item in dictionary)
             {
-                throw new ArgumentException ($"“{nameof (name)}”不能为 null 或空。", nameof (name));
+                this.dict.Add (item.Key, item.Value);
+                this.keyIndex.Add (item.Key);
             }
-
-            this.Name = name;
-            this.dict = new SortedList<string, IniValue> (dictionary);
-        }
-
-        /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例为空，具有指定的初始容量并使用指定的 <see cref="IComparer{T}"/>
-        /// </summary>
-        /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
-        /// <param name="capacity"><see cref="IniSection"/> 可包含的初始元素数</param>
-        /// <param name="comparer">比较键时要使用的 <see cref="IComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IComparer{T}"/></param>
-        /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
-        public IniSection (string name, int capacity, IComparer<string> comparer)
-        {
-            if (string.IsNullOrEmpty (name))
-            {
-                throw new ArgumentException ($"“{nameof (name)}”不能为 null 或空。", nameof (name));
-            }
-
-            this.Name = name;
-            this.dict = new SortedList<string, IniValue> (capacity, comparer);
-        }
-
-        /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例包含从指定的 <see cref="IDictionary{Tkey, TValue}"/> 中复制的元素，其容量足以容纳所复制的元素数并使用指定的 <see cref="IComparer{T}"/>
-        /// </summary>
-        /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
-        /// <param name="dictionary"><see cref="IDictionary{TKey, TValue}"/>，它的元素被复制到新 <see cref="IniSection"/></param>
-        /// <param name="comparer">比较键时要使用的 <see cref="IComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IComparer{T}"/></param>
-        /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
-        public IniSection (string name, IDictionary<string, IniValue> dictionary, IComparer<string> comparer)
-        {
-            if (string.IsNullOrEmpty (name))
-            {
-                throw new ArgumentException ($"“{nameof (name)}”不能为 null 或空。", nameof (name));
-            }
-
-            this.Name = name;
-            this.dict = new SortedList<string, IniValue> (dictionary, comparer);
         }
         #endregion
 
@@ -181,19 +122,13 @@ namespace JieRuntime.Ini
         /// <exception cref="NotSupportedException"><see cref="IniSection"/> 为只读</exception>
         public void Add (string key, IniValue value)
         {
-            this.dict.Add (key, value);
-        }
+            if (this.ContainsKey (key))
+            {
+                throw new ArgumentException ($"“{key}”存在一个相同的键。", nameof (key));
+            }
 
-        /// <summary>
-        /// 向 <see cref="IniSection"/> 添加一个带有所提供的键和值的元素
-        /// </summary>
-        /// <param name="item">用作要添加的元素的键值对的对象</param>
-        /// <exception cref="ArgumentNullException">key 为 null</exception>
-        /// <exception cref="ArgumentException"><see cref="IniSection"/> 中已存在具有相同键的元素</exception>
-        /// <exception cref="NotSupportedException"><see cref="IniSection"/> 为只读</exception>
-        public void Add (KeyValuePair<string, IniValue> item)
-        {
-            this.Add (item);
+            this.dict.Add (key, value);
+            this.keyIndex.Add (key);
         }
 
         /// <summary>
@@ -205,17 +140,7 @@ namespace JieRuntime.Ini
         /// <returns>如果该元素已成功移除，则为 <see langword="true"/>；否则为 <see langword="false"/>。 如果在原始 <see langword="false"/> 中没有找到 key，则此方法也会返回 <see cref="IniSection"/></returns>
         public bool Remove (string key)
         {
-            return this.dict.Remove (key);
-        }
-
-        /// <summary>
-        /// 从 <see cref="IniSection"/> 中移除特定对象的第一个匹配项
-        /// </summary>
-        /// <param name="item">要从 <see cref="IniSection"/> 中删除的对象</param>
-        /// <returns>如果从 <see cref="IniSection"/> 中成功移除 item，则为 <see langword="true"/>；否则为 <see langword="false"/>。<see cref="IniSection"/> 中没有找到 item，该方法也会返回 <see langword="false"/></returns>
-        public bool Remove (KeyValuePair<string, IniValue> item)
-        {
-            return this.Remove (item.Key);
+            return this.dict.Remove (key) && this.keyIndex.Remove (key);
         }
 
         /// <summary>
@@ -224,16 +149,7 @@ namespace JieRuntime.Ini
         public void Clear ()
         {
             this.dict.Clear ();
-        }
-
-        /// <summary>
-        /// 确定 <see cref="IniSection"/> 是否包含特定值
-        /// </summary>
-        /// <param name="item">要在 <see cref="IniSection"/> 中定位的对象</param>
-        /// <returns>如果在 <see cref="IniSection"/> 中找到 item，则为 <see langword="true"/>；否则为 <see langword="false"/></returns>
-        public bool Contains (KeyValuePair<string, IniValue> item)
-        {
-            return this.dict.Contains (item);
+            this.keyIndex.Clear ();
         }
 
         /// <summary>
@@ -300,9 +216,9 @@ namespace JieRuntime.Ini
             }
 
             int num = 0;
-            foreach (KeyValuePair<string, IniValue> item in this.dict)
+            foreach (string key in this.keyIndex)
             {
-                array[arrayIndex + num] = item;
+                array[arrayIndex + num] = new KeyValuePair<string, IniValue> (key, this.dict[key]);
                 num++;
             }
         }
@@ -312,15 +228,6 @@ namespace JieRuntime.Ini
         /// </summary>
         /// <returns>用于循环访问集合的枚举数</returns>
         public IEnumerator<KeyValuePair<string, IniValue>> GetEnumerator ()
-        {
-            return this.dict.GetEnumerator ();
-        }
-
-        /// <summary>
-        /// 返回循环访问集合的枚举数
-        /// </summary>
-        /// <returns>一个可用于循环访问集合的 <see cref="IEnumerator"/> 对象</returns>
-        IEnumerator IEnumerable.GetEnumerator ()
         {
             return this.dict.GetEnumerator ();
         }
@@ -350,7 +257,7 @@ namespace JieRuntime.Ini
                 IniValue valueA = this.Values.ElementAt (i);
                 IniValue valueB = other.Values.ElementAt (i);
 
-                if (string.CompareOrdinal (keyA, KeyB) != 0 || !valueA.Equals (valueB))
+                if (string.CompareOrdinal (keyA, KeyB) != 0 || !valueA.Equals (valueB) || !this.keyIndex[i].Equals (other.keyIndex[i]))
                 {
                     return false;
                 }
@@ -375,7 +282,7 @@ namespace JieRuntime.Ini
         /// <returns>32 位有符号整数哈希代码</returns>
         public override int GetHashCode ()
         {
-            return this.Name.GetHashCode () & this.dict.GetHashCode ();
+            return this.Name.GetHashCode () & this.dict.GetHashCode () & this.keyIndex.GetHashCode ();
         }
 
         /// <summary>
@@ -390,12 +297,53 @@ namespace JieRuntime.Ini
             builder.AppendLine ($"[{this.Name}]");
 
             // 添加键值对
-            foreach (KeyValuePair<string, IniValue> item in this)
+            foreach (string key in this.keyIndex)
             {
-                builder.AppendLine ($"{item.Key}={item.Value}");
+                builder.AppendLine ($"{key}={this.dict[key]}");
             }
 
             return builder.ToString ();
+        }
+
+        /// <summary>
+        /// 向 <see cref="IniSection"/> 添加一个带有所提供的键和值的元素
+        /// </summary>
+        /// <param name="item">用作要添加的元素的键值对的对象</param>
+        /// <exception cref="ArgumentNullException">key 为 null</exception>
+        /// <exception cref="ArgumentException"><see cref="IniSection"/> 中已存在具有相同键的元素</exception>
+        /// <exception cref="NotSupportedException"><see cref="IniSection"/> 为只读</exception>
+        void ICollection<KeyValuePair<string, IniValue>>.Add (KeyValuePair<string, IniValue> item)
+        {
+            this.Add (item.Key, item.Value);
+        }
+
+        /// <summary>
+        /// 从 <see cref="IniSection"/> 中移除特定对象的第一个匹配项
+        /// </summary>
+        /// <param name="item">要从 <see cref="IniSection"/> 中删除的对象</param>
+        /// <returns>如果从 <see cref="IniSection"/> 中成功移除 item，则为 <see langword="true"/>；否则为 <see langword="false"/>。<see cref="IniSection"/> 中没有找到 item，该方法也会返回 <see langword="false"/></returns>
+        bool ICollection<KeyValuePair<string, IniValue>>.Remove (KeyValuePair<string, IniValue> item)
+        {
+            return this.Remove (item.Key);
+        }
+
+        /// <summary>
+        /// 确定 <see cref="IniSection"/> 是否包含特定值
+        /// </summary>
+        /// <param name="item">要在 <see cref="IniSection"/> 中定位的对象</param>
+        /// <returns>如果在 <see cref="IniSection"/> 中找到 item，则为 <see langword="true"/>；否则为 <see langword="false"/></returns>
+        bool ICollection<KeyValuePair<string, IniValue>>.Contains (KeyValuePair<string, IniValue> item)
+        {
+            return this.dict.Contains (item);
+        }
+
+        /// <summary>
+        /// 返回循环访问集合的枚举数
+        /// </summary>
+        /// <returns>一个可用于循环访问集合的 <see cref="IEnumerator"/> 对象</returns>
+        IEnumerator IEnumerable.GetEnumerator ()
+        {
+            return this.dict.GetEnumerator ();
         }
         #endregion
     }
