@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using static System.Collections.Specialized.BitVector32;
+
 namespace JieRuntime.Ini
 {
     /// <summary>
@@ -12,7 +14,9 @@ namespace JieRuntime.Ini
     public class IniObject : ICollection<IniSection>, IEquatable<IniObject>
     {
         #region --字段--
-        private readonly SortedList<string, IniSection> list;
+        //private readonly SortedList<string, IniSection> list;
+        private readonly Dictionary<string, int> keyDict;
+        private readonly List<IniSection> list;
         #endregion
 
         #region --属性--
@@ -25,7 +29,7 @@ namespace JieRuntime.Ini
         /// <exception cref="KeyNotFoundException">已检索该属性且集合中不存在 key</exception>
         public IniSection this[string key]
         {
-            get => this.list[key];
+            get => this.list[this.keyDict[key]];
             set
             {
                 if (!this.ContainsKey (key))
@@ -34,7 +38,7 @@ namespace JieRuntime.Ini
                 }
                 else
                 {
-                    this.list[key] = value;
+                    this.list[this.keyDict[key]] = value;
                 }
             }
         }
@@ -55,9 +59,8 @@ namespace JieRuntime.Ini
         /// 初始化 <see cref="IniObject"/> 类的新实例，该实例为空并且具有默认初始容量
         /// </summary>
         public IniObject ()
-        {
-            this.list = new SortedList<string, IniSection> ();
-        }
+            : this (0)
+        { }
 
         /// <summary>
         /// 初始化 <see cref="IniObject"/> 类的新实例，该实例为空并且具有指定的初始容量
@@ -66,7 +69,8 @@ namespace JieRuntime.Ini
         /// <exception cref="ArgumentOutOfRangeException">capacity 小于 0</exception>
         public IniObject (int capacity)
         {
-            this.list = new SortedList<string, IniSection> (capacity);
+            this.list = new List<IniSection> (capacity);
+            this.keyDict = new Dictionary<string, int> (capacity);
         }
 
         /// <summary>
@@ -76,7 +80,12 @@ namespace JieRuntime.Ini
         /// <exception cref="ArgumentNullException">ArgumentNullException</exception>
         public IniObject (IEnumerable<IniSection> collection)
         {
-            this.list = new SortedList<string, IniSection> (collection.ToDictionary (keySelector => keySelector.Name));
+            this.list = new List<IniSection> (collection);
+            // 将索引和键关联
+            for (int i = 0; i < list.Count; i++)
+            {
+                this.keyDict.Add (list[i].Name, i);
+            }
         }
         #endregion
 
@@ -87,7 +96,8 @@ namespace JieRuntime.Ini
         /// <param name="item">要添加到 <see cref="IniObject"/> 的对象</param>
         public void Add (IniSection item)
         {
-            this.list.Add (item.Name, item);
+            this.list.Add (item);
+            this.keyDict.Add (item.Name, this.list.IndexOf (item));
         }
 
         /// <summary>
@@ -103,7 +113,13 @@ namespace JieRuntime.Ini
                 throw new ArgumentException ($"“{nameof (key)}”不能为 null 或空。", nameof (key));
             }
 
-            return this.list.Remove (key);
+            if (this.keyDict.ContainsKey (key))
+            {
+                this.list.RemoveAt (this.keyDict[key]);
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -119,7 +135,13 @@ namespace JieRuntime.Ini
                 throw new ArgumentNullException (nameof (item));
             }
 
-            return this.list.Remove (item.Name);
+            if (this.keyDict.ContainsKey (item.Name))
+            {
+                this.keyDict.Remove (item.Name);
+                return this.list.Remove (item);
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -128,6 +150,7 @@ namespace JieRuntime.Ini
         public void Clear ()
         {
             this.list.Clear ();
+            this.keyDict.Clear ();
         }
 
         /// <summary>
@@ -137,7 +160,7 @@ namespace JieRuntime.Ini
         /// <returns>如果在 <see cref="IniObject"/> 中找到 item，则为 <see langword="true"/>；否则为 <see langword="false"/></returns>
         public bool Contains (IniSection item)
         {
-            return this.list.ContainsValue (item);
+            return this.list.Contains (item);
         }
 
         /// <summary>
@@ -148,7 +171,7 @@ namespace JieRuntime.Ini
         /// <returns>如果 <see cref="IniObject"/> 包含具有指定键的元素，则为 <see langword="true"/>；否则为 <see langword="false"/></returns>
         public bool ContainsKey (string key)
         {
-            return this.list.ContainsKey (key);
+            return this.keyDict.ContainsKey (key);
         }
 
         /// <summary>
@@ -160,7 +183,14 @@ namespace JieRuntime.Ini
         /// <returns>如果 <see cref="IniObject"/> 包含具有指定键的元素，则为 <see langword="true"/>；否则为 <see langword="false"/></returns>
         public bool TryGetValue (string key, out IniSection value)
         {
-            return this.list.TryGetValue (key, out value);
+            value = null;
+
+            if (this.keyDict.TryGetValue (key, out int index))
+            {
+                value = this.list[index];
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -194,7 +224,7 @@ namespace JieRuntime.Ini
             }
 
             int num = 0;
-            foreach (IniSection item in this.list.Values)
+            foreach (IniSection item in this.list)
             {
                 array[arrayIndex + num] = item;
                 num++;
@@ -207,7 +237,7 @@ namespace JieRuntime.Ini
         /// <returns><see cref="IEnumerator"/> 的类型 <see cref="IEnumerator{IniSection}"/> 的 <see cref="IniObject"/></returns>
         public IEnumerator<IniSection> GetEnumerator ()
         {
-            return this.list.Values.GetEnumerator ();
+            return this.list.GetEnumerator ();
         }
 
         /// <summary>
@@ -216,7 +246,7 @@ namespace JieRuntime.Ini
         /// <returns>用于循环访问集合的枚举数</returns>
         IEnumerator IEnumerable.GetEnumerator ()
         {
-            return this.list.Values.GetEnumerator ();
+            return this.list.GetEnumerator ();
         }
 
         /// <summary>
@@ -238,10 +268,10 @@ namespace JieRuntime.Ini
 
             for (int i = 0; i < this.Count; i++)
             {
-                IniSection valueA = this.list.Values.ElementAt (i);
-                IniSection valueB = other.list.Values.ElementAt (i);
+                IniSection valueA = this.list[i];
+                IniSection valueB = other.list[i];
 
-                if (!valueA.Equals (valueB))
+                if (!valueA.Equals (valueB) && this.keyDict[valueA.Name].Equals (other.keyDict[valueB.Name]))
                 {
                     return false;
                 }
@@ -266,7 +296,7 @@ namespace JieRuntime.Ini
         /// <returns>32 位有符号整数哈希代码</returns>
         public override int GetHashCode ()
         {
-            return this.list.GetHashCode ();
+            return this.list.GetHashCode () & this.keyDict.GetHashCode ();
         }
 
         /// <summary>
@@ -276,7 +306,7 @@ namespace JieRuntime.Ini
         public override string ToString ()
         {
             StringBuilder builder = new ();
-            foreach (IniSection item in this.list.Values)
+            foreach (IniSection item in this.list)
             {
                 builder.AppendLine (item.ToString ());
             }
