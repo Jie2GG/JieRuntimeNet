@@ -96,6 +96,11 @@ namespace JieRuntime.Ini
         /// <param name="item">要添加到 <see cref="IniObject"/> 的对象</param>
         public void Add (IniSection item)
         {
+            if (this.ContainsKey (item.Name))
+            {
+                throw new ArgumentException ($"“{item.Name}”存在一个同名的实例。", nameof (item));
+            }
+
             this.list.Add (item);
             this.keyDict.Add (item.Name, this.list.IndexOf (item));
         }
@@ -271,7 +276,7 @@ namespace JieRuntime.Ini
                 IniSection valueA = this.list[i];
                 IniSection valueB = other.list[i];
 
-                if (!valueA.Equals (valueB) && this.keyDict[valueA.Name].Equals (other.keyDict[valueB.Name]))
+                if (!valueA.Equals (valueB) || !this.keyDict[valueA.Name].Equals (other.keyDict[valueB.Name]))
                 {
                     return false;
                 }
