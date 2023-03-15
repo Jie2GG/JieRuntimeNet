@@ -51,7 +51,7 @@ namespace JieRuntime.Ini
         /// <summary>
         /// 获取一个值，该值指示 <see cref="IniObject"/> 是否为只读
         /// </summary>
-        public bool IsReadOnly => ((ICollection<KeyValuePair<string, IniSection>>)this.list).IsReadOnly;
+        public bool IsReadOnly => ((ICollection<IniSection>)this.list).IsReadOnly;
         #endregion
 
         #region --构造函数--
