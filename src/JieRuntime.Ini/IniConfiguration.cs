@@ -51,6 +51,20 @@ namespace JieRuntime.Ini
         /// <exception cref="PathTooLongException">指定的路径、文件名或两者均超过系统定义的最大长度</exception>
         /// <exception cref="NotSupportedException"><paramref name="fileName"/> 在字符串中间包含冒号(:)</exception>
         public IniConfiguration (string fileName)
+            : this (fileName, Encoding.UTF8)
+        { }
+
+        /// <summary>
+        /// 初始化 <see cref="IniConfiguration"/> 类的新实例, 并指定其文件编码
+        /// </summary>
+        /// <param name="fileName">指定配置文件的路径</param>
+        /// <param name="fileEncoding">指定配置文件的文件编码</param>
+        /// <exception cref="ArgumentException"><paramref name="fileName"/> 不能为 <see langword="null"/> 或空字符串</exception>
+        /// <exception cref="SecurityException">调用者没有所需的权限</exception>
+        /// <exception cref="UnauthorizedAccessException">拒绝访问 <paramref name="fileName"/></exception>
+        /// <exception cref="PathTooLongException">指定的路径、文件名或两者均超过系统定义的最大长度</exception>
+        /// <exception cref="NotSupportedException"><paramref name="fileName"/> 在字符串中间包含冒号(:)</exception>
+        public IniConfiguration (string fileName, Encoding fileEncoding)
         {
             if (string.IsNullOrEmpty (fileName))
             {
@@ -58,7 +72,7 @@ namespace JieRuntime.Ini
             }
 
             this.Configuration = new IniObject ();
-            this.FileEncoding = Encoding.UTF8;
+            this.FileEncoding = fileEncoding;
             this.FileInfo = new FileInfo (fileName);
         }
         #endregion
