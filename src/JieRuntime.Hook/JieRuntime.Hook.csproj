@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<!--编译配置-->
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<Platforms>AnyCPU</Platforms>
+		<AssemblyName>JieRuntime.Hook</AssemblyName>
+		<RootNamespace>JieRuntime.Hook</RootNamespace>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<LangVersion>10.0</LangVersion>
+
+		<!--NuGet配置-->
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>JieRuntime.Hook</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>JieGG</Authors>
+		<Company>JieGG</Company>
+		<Product>.NET扩展运行时Hook组件</Product>
+		<Description>用于扩展.NET Hook组件的运行时组件</Description>
+		<Copyright>Copyright © 2022 JieGG All rights reserved</Copyright>
+		<RepositoryType>git</RepositoryType>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageProjectUrl>https://github.com/Jie2GG/JieRuntimeNet</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Jie2GG/JieRuntimeNet</RepositoryUrl>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>LOGO.jpg</PackageIcon>
+	</PropertyGroup>
+
+	<!--资产配置-->
+	<ItemGroup>
+		<None Include="Assets\Build\**" Pack="True" PackagePath="build\" />
+		<None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
+		<None Include="..\..\LOGO.jpg" Pack="True" PackagePath="\" />
+		<None Include="..\..\README.md" Pack="True" PackagePath="\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\JieRuntime.Windows\JieRuntime.Windows.csproj" />
+	  <ProjectReference Include="..\JieRuntime\JieRuntime.csproj" />
+	</ItemGroup>
+</Project>
