@@ -12,7 +12,7 @@ namespace JieRuntime.Ini
     public class IniSection : IDictionary<string, IniValue>, IEquatable<IniSection>
     {
         #region --字段--
-        private readonly Dictionary<string, IniValue> dict;
+        private readonly SortedList<string, IniValue> dict;
         #endregion
 
         #region --属性--
@@ -67,7 +67,7 @@ namespace JieRuntime.Ini
 
         #region --构造函数--
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该示例为空且具有默认的初始容量，并使用默认的 <see cref="IEqualityComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该示例为空且具有默认的初始容量，并使用默认的 <see cref="IComparer{T}"/>
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
         /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
@@ -79,11 +79,11 @@ namespace JieRuntime.Ini
             }
 
             this.Name = name;
-            this.dict = new Dictionary<string, IniValue> ();
+            this.dict = new SortedList<string, IniValue> ();
         }
 
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该示例为空且具有指定的初始容量，并使用默认的 <see cref="IEqualityComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该示例为空且具有指定的初始容量，并使用默认的 <see cref="IComparer{T}"/>
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
         /// <param name="capacity"><see cref="IniSection"/> 可包含的初始元素数</param>
@@ -96,16 +96,16 @@ namespace JieRuntime.Ini
             }
 
             this.Name = name;
-            this.dict = new Dictionary<string, IniValue> (capacity);
+            this.dict = new SortedList<string, IniValue> (capacity);
         }
 
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例为空，具有默认的初始容量并使用指定的 <see cref="IEqualityComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例为空，具有默认的初始容量并使用指定的 <see cref="IComparer{T}"/>
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
-        /// <param name="comparer">比较键时要使用的 <see cref="IEqualityComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IEqualityComparer{T}"/></param>
+        /// <param name="comparer">比较键时要使用的 <see cref="IComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IComparer{T}"/></param>
         /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
-        public IniSection (string name, IEqualityComparer<string> comparer)
+        public IniSection (string name, IComparer<string> comparer)
         {
             if (string.IsNullOrEmpty (name))
             {
@@ -113,11 +113,11 @@ namespace JieRuntime.Ini
             }
 
             this.Name = name;
-            this.dict = new Dictionary<string, IniValue> (comparer);
+            this.dict = new SortedList<string, IniValue> (comparer);
         }
 
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例包含从指定的 <see cref="IDictionary{TKey, TValue}"/> 中复制的元素，其容量足以容纳所复制的元素数并使用默认的 <see cref="IEqualityComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例包含从指定的 <see cref="IDictionary{TKey, TValue}"/> 中复制的元素，其容量足以容纳所复制的元素数并使用默认的 <see cref="IComparer{T}"/>
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
         /// <param name="dictionary"><see cref="IDictionary{TKey, TValue}"/>，它的元素被复制到新 <see cref="IniSection"/></param>
@@ -130,17 +130,17 @@ namespace JieRuntime.Ini
             }
 
             this.Name = name;
-            this.dict = new Dictionary<string, IniValue> (dictionary);
+            this.dict = new SortedList<string, IniValue> (dictionary);
         }
 
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例为空，具有指定的初始容量并使用指定的 <see cref="IEqualityComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例为空，具有指定的初始容量并使用指定的 <see cref="IComparer{T}"/>
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
         /// <param name="capacity"><see cref="IniSection"/> 可包含的初始元素数</param>
-        /// <param name="comparer">比较键时要使用的 <see cref="IEqualityComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IEqualityComparer{T}"/></param>
+        /// <param name="comparer">比较键时要使用的 <see cref="IComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IComparer{T}"/></param>
         /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
-        public IniSection (string name, int capacity, IEqualityComparer<string> comparer)
+        public IniSection (string name, int capacity, IComparer<string> comparer)
         {
             if (string.IsNullOrEmpty (name))
             {
@@ -148,17 +148,17 @@ namespace JieRuntime.Ini
             }
 
             this.Name = name;
-            this.dict = new Dictionary<string, IniValue> (capacity, comparer);
+            this.dict = new SortedList<string, IniValue> (capacity, comparer);
         }
 
         /// <summary>
-        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例包含从指定的 <see cref="IDictionary{Tkey, TValue}"/> 中复制的元素，其容量足以容纳所复制的元素数并使用指定的 <see cref="IEqualityComparer{T}"/>
+        /// 初始化 <see cref="IniSection"/> 类的新实例，该实例包含从指定的 <see cref="IDictionary{Tkey, TValue}"/> 中复制的元素，其容量足以容纳所复制的元素数并使用指定的 <see cref="IComparer{T}"/>
         /// </summary>
         /// <param name="name"><see cref="IniSection"/> 使用的节名称</param>
         /// <param name="dictionary"><see cref="IDictionary{TKey, TValue}"/>，它的元素被复制到新 <see cref="IniSection"/></param>
-        /// <param name="comparer">比较键时要使用的 <see cref="IEqualityComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IEqualityComparer{T}"/></param>
+        /// <param name="comparer">比较键时要使用的 <see cref="IComparer{T}"/> 实现，或者为 null，以便为键类型使用默认的 <see cref="IComparer{T}"/></param>
         /// <exception cref="ArgumentException">name 是 null 或 name 是空字符串</exception>
-        public IniSection (string name, IDictionary<string, IniValue> dictionary, IEqualityComparer<string> comparer)
+        public IniSection (string name, IDictionary<string, IniValue> dictionary, IComparer<string> comparer)
         {
             if (string.IsNullOrEmpty (name))
             {
@@ -166,7 +166,7 @@ namespace JieRuntime.Ini
             }
 
             this.Name = name;
-            this.dict = new Dictionary<string, IniValue> (dictionary, comparer);
+            this.dict = new SortedList<string, IniValue> (dictionary, comparer);
         }
         #endregion
 
