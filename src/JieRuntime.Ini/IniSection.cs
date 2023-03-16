@@ -26,7 +26,15 @@ namespace JieRuntime.Ini
         /// <exception cref="KeyNotFoundException">已检索该属性且集合中不存在 key</exception>
         public IniValue this[string key]
         {
-            get => this.dict[key];
+            get
+            {
+                if (!this.ContainsKey (key))
+                {
+                    this.Add (key, null);
+                }
+                return this.dict[key];
+            }
+
             set
             {
                 if (!this.dict.ContainsKey (key))

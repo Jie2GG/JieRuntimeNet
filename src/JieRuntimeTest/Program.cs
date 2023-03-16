@@ -9,6 +9,7 @@ using JieRuntime.Windows.Enums;
 using System.Collections.ObjectModel;
 using JieRuntime;
 using JieRuntime.Hook;
+using JieRuntime.Ini;
 
 namespace JieRuntimeTest
 {
@@ -21,7 +22,7 @@ namespace JieRuntimeTest
 
         public static void Main ()
         {
-            MessageBoxDelegate @delegate = new MessageBoxDelegate (Callback);
+            //MessageBoxDelegate @delegate = new MessageBoxDelegate (Callback);
             //MessageBoxA (IntPtr.Zero, "Test", "Test", MessageBoxOptions.MB_OK);
             //byte[] buf = Program.ConvetToBinary (1);
             //byte[] buf2 = BinaryConvert.GetBytes (1);
@@ -45,8 +46,16 @@ namespace JieRuntimeTest
             //    }
             //}
 
-            WindowsHook hook = new WindowsHook (2916);
-            hook.Install ("user32.dll", nameof (MessageBoxA), @delegate);
+            //WindowsHook hook = new WindowsHook (2916);
+            //hook.Install ("user32.dll", nameof (MessageBoxA), @delegate);
+
+            IniConfiguration configuration = new IniConfiguration (@"D:\test.ini");
+            configuration.Load ();
+            configuration.Configuration["boos"]["key"] = 123;
+            Console.WriteLine ((int)configuration.Configuration["boos"]["abc"]);
+            configuration.Save ();
+
+
             Console.Read ();
             //MessageBoxA (IntPtr.Zero, "Test", "Test", MessageBoxOptions.MB_OK);
 

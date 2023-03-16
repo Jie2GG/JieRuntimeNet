@@ -182,11 +182,12 @@ namespace JieRuntime.Ini
         public void Save ()
         {
             // 处理文件夹
-            if (this.FileInfo.Directory.Exists)
+            if (!this.FileInfo.Directory.Exists)
             {
                 this.FileInfo.Directory.Create ();
             }
-            FileStream fileStream = this.FileInfo.Open (FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+            FileStream fileStream = this.FileInfo.Open (FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
             fileStream.SetLength (0);   // 清空文件
 
             using TextWriter text = new StreamWriter (fileStream, this.FileEncoding);
