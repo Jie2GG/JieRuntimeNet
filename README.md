@@ -3,8 +3,14 @@
  <h2 align="center">JieRuntimeNet</h2>
 </p>
   <p align="center">
-    <a href="#demo">查看 Demo</a>
-    ·
+    <p align="center">
+    <a href="https://github.com/Jie2GG/JieRuntimeNet/issues">
+      <img alt="Issues" src="https://img.shields.io/github/issues/Jie2GG/JieRuntimeNet?color=0088ff" />
+    </a>
+    <a href="https://github.com/Jie2GG/JieRuntimeNet/pulls">
+      <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/Jie2GG/JieRuntimeNet?color=0088ff" />
+    </a>
+    <br/>
     <a href="https://github.com/Jie2GG/JieRuntimeNet/issues">报告 Bug</a>
     ·
     <a href="https://github.com/Jie2GG/JieRuntimeNet/issues">请求增加功能</a>
@@ -12,61 +18,33 @@
 </p>
 <p align="center">喜欢这个项目？给我点个Star吧！
 
-# 特性
-  
-- [Hook](#Hook)
-- [IniConfiguration](#Ini)
-- [Io](#Io)
-- [Net](#Net)
-- [Rpc](#Rpc)
-- [Windows](#Windows)
+# 关于项目
+
+.NET 提供了许多功能强大的基类库, 但是这些库通常更兼顾安全性, 在执行效率上通常难以注重调用细节, 因此创建了这个基于 .NET 的高性能运行库, 作为补充.
+
+# 快速开始
+
+本运行库基于 .net standard 2.0 构建, 可以在支持 .net standard 2.0 依赖的任意项目上引用本运行库. 你可以在 Nuget 上搜索对应的功能模块名来安装本运行库.
 
 
-# Hook
+# 功能模块
 
+- [JieRuntime](src/JieRuntime/)
+- [JieRuntime.Ini](src/JieRuntime.Ini/README.md)
+- [JieRuntime.IO](src/JieRuntime.IO/)
+- [JieRuntime.Net](src/JieRuntime.Net/)
+- [JieRuntime.Rpc](src/JieRuntime.Rpc/)
+- [JieRuntime.Hook](src/JieRuntime.Hook/) 开发中...
 
-# IniConfiguration
-  
-### IniConfiguration 自述
-  IniConfiguration 是基于 C# 开发, 针对于 Windows 平台下 Ini 配置文件的一款工具类, 
-	该工具能快速的将 Ini 配置文件的 "节点", "键", "值", "注释" 分开, 在轻松实现对
-	Ini 配置文件的增删改查的同时, 可直接移植到其它平台使用.
-  
-### IniConfiguration 示例 
-  
-> 1. 创建一个新的 Ini 配置项
-```C#
-  IniConfiguration ini = new IniConfiguration (文件路径);
-```
-> 2. 读取文件.
-```C#
-  ini.load()
-```
-> 3. 对文件的节点,value进行读取,读取value会自动判定变量的类型,根据对应的类型来读取value
-```C#
-  string str= ini.Configuration["节点1"][key];(value => string)
-  int a = ini.Configuration["节点1"][key];(value => int)
-```  
-> 3. 也可以直接对文件的节点下的数据进行全部读取.
-```C#
-  IniSection Section= ini.Configuration["节点1"];
-```  
-> 4.  修改 Ini 配置文件
-```C#
-  ini.Configuration["节点1"][key] = str;
-  ini.Configuration["节点1"][key1] = int;
-  ini.Configuration["节点1"][key2] = fload;
-  ini.save()
-```  
-  
-  
-# Io
+## :sparkling_heart: 支持这个项目
 
+我尽己所能地进行开源，并且我尽量回复每个在使用项目时需要帮助的人。很明显，这需要时间，但你可以免费享受这些。
 
-# Net
+然而, 如果你正在使用这个项目并感觉良好，或只是想要支持我继续开发，你可以通过如下方式：
 
+- 在你的项目中使用 JieRuntimeNet 时，链接指向这里 :D
+- Star 并 分享这个项目 :rocket:
+- <a><img src="https://gw.alipayobjects.com/mdn/member_frontWeb/afts/img/A*oRlnSYAsgYQAAAAAAAAAAABkARQnAQ" alt="支付宝" width="58" height="20"></a> - 你可以通过 PayPal 一次性捐款. 我多半会买一杯 ~~咖啡~~ 茶. :tea:
 
-# Rpc
+谢谢！ :heart:
 
-
-# Windows
