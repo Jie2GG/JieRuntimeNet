@@ -71,7 +71,7 @@ namespace JieRuntime.Ini
         /// <summary>
         /// 获取当前实例的节名称
         /// </summary>
-        public string Name { get; }
+        public string Name { get; internal set; }
         #endregion
 
         #region --构造函数--

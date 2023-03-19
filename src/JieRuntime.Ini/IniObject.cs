@@ -45,6 +45,9 @@ namespace JieRuntime.Ini
                 }
                 else
                 {
+                    // 修改 Section 的 Name
+                    value.Name = key;
+
                     this.list[this.keyDict[key]] = value;
                 }
             }
