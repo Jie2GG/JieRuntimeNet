@@ -44,7 +44,7 @@
 
 - 在你的项目中使用 JieRuntimeNet 时，链接指向这里 :D
 - Star 并 分享这个项目 :rocket:
-- <a href="#alipay"><img src="https://gw.alipayobjects.com/mdn/member_frontWeb/afts/img/A*oRlnSYAsgYQAAAAAAAAAAABkARQnAQ" alt="支付宝" width="58" height="20"></a> - 你可以通过 AliPay 或 <a href="#wechatpay"><img src="https://td.cdn-go.cn/enterprise_payment/v0.0.9/logo.png" alt="微信" width="78" height="20"></a> WechatPay 一次性捐款. 我多半会买一杯 ~~咖啡~~ 茶. :tea:
+- 你可以通过 <a href="#alipay"><img src="https://gw.alipayobjects.com/mdn/member_frontWeb/afts/img/A*oRlnSYAsgYQAAAAAAAAAAABkARQnAQ" alt="支付宝" width="58" height="20"></a> AliPay 或 <a href="#wechatpay"><img src="https://td.cdn-go.cn/enterprise_payment/v0.0.9/logo.png" alt="微信" width="78" height="20"></a> WechatPay 一次性捐款. 我多半会买一杯 ~~咖啡~~ 茶. :tea:
 
 谢谢！ :heart:
 
