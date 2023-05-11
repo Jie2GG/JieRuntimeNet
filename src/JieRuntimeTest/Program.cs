@@ -52,7 +52,7 @@ namespace JieRuntimeTest
             IniConfiguration configuration = new IniConfiguration (@"D:\test.ini");
             configuration.Load ();
             configuration.Configuration["boos"]["key"] = 123;
-            Console.WriteLine ((int)configuration.Configuration["boos"]["abc"]);
+            Console.WriteLine ((int)configuration.Configuration["boos"]["key"]);
             configuration.Save ();
 
 

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <!--编译配置-->
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <Platforms>AnyCPU</Platforms>
+        <AssemblyName>JieRuntime.EMail</AssemblyName>
+        <RootNamespace>JieRuntime.EMail</RootNamespace>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <LangVersion>10.0</LangVersion>
+
+        <!--NuGet配置-->
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <PackageId>JieRuntime.EMail</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>JieGG</Authors>
+        <Company>JieGG</Company>
+        <Product>.NET扩展运行时邮件组件</Product>
+        <Description>用于扩展.NET 邮箱组件的运行时组件</Description>
+        <Copyright>Copyright © 2022 JieGG All rights reserved</Copyright>
+        <RepositoryType>git</RepositoryType>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <PackageProjectUrl>https://github.com/Jie2GG/JieRuntimeNet</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Jie2GG/JieRuntimeNet</RepositoryUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>LOGO.jpg</PackageIcon>
+    </PropertyGroup>
+</Project>
