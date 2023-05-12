@@ -188,6 +188,30 @@ namespace JieRuntime.IO
         }
 
         /// <summary>
+        /// 将 <see cref="float"/> 写入流的指定位置
+        /// </summary>
+        /// <param name="value">要写入的 <see cref="float"/> 值</param>
+        /// <param name="isBigEndian">是否以大端序模式写入, 默认: <see langword="true"/></param>
+        /// <exception cref="IOException">I/O错误</exception>
+        /// <exception cref="ObjectDisposedException">方法在流关闭后被调用</exception>
+        public void Write (float value, bool isBigEndian = true)
+        {
+            this.Write (BinaryConvert.GetBytes (value, isBigEndian));
+        }
+
+        /// <summary>
+        /// 将 <see cref="double"/> 写入流的指定位置
+        /// </summary>
+        /// <param name="value">要写入的 <see cref="double"/> 值</param>
+        /// <param name="isBigEndian">是否以大端序模式写入, 默认: <see langword="true"/></param>
+        /// <exception cref="IOException">I/O错误</exception>
+        /// <exception cref="ObjectDisposedException">方法在流关闭后被调用</exception>
+        public void Write (double value, bool isBigEndian = true)
+        {
+            this.Write (BinaryConvert.GetBytes (value, isBigEndian));
+        }
+
+        /// <summary>
         /// 获取写入到流中的所有数据
         /// </summary>
         /// <returns>一个字节数组, 包含所有写入到流中的数据</returns>
@@ -205,7 +229,12 @@ namespace JieRuntime.IO
             // 读取所有数据
             long position = this.Position;
             this.Position = 0;
-            this.binaryWriter.BaseStream.Read (buf, 0, buf.Length);
+            int readLength = this.binaryWriter.BaseStream.Read (buf, 0, buf.Length);
+            if (readLength != this.Length)
+            {
+                throw new InvalidDataException ($"基础流的数据无效. 当前流: {this.Length}, 基础流: {readLength}");
+            }
+
             this.Position = position;
 
             return buf;
