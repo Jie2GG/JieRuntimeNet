@@ -479,6 +479,32 @@ namespace JieRuntime
         }
 
         /// <summary>
+        /// 以字节数组的形式返回指定的单精度浮点数
+        /// </summary>
+        /// <param name="value">要转换的数字</param>
+        /// <param name="reverse">是否反序转换</param>
+        /// <returns>长度为 8 的字节数组</returns>
+        public static byte[] GetBytes (float value, bool reverse = false)
+        {
+            byte[] result = BitConverter.GetBytes (value);
+            ConvertReverse (result, reverse);
+            return result;
+        }
+
+        /// <summary>
+        /// 以字节数组的形式返回指定的双精度浮点数
+        /// </summary>
+        /// <param name="value">要转换的数字</param>
+        /// <param name="reverse">是否反序转换</param>
+        /// <returns>长度为 8 的字节数组</returns>
+        public static byte[] GetBytes (double value, bool reverse = false)
+        {
+            byte[] result = BitConverter.GetBytes (value);
+            ConvertReverse (result, reverse);
+            return result;
+        }
+
+        /// <summary>
         /// 将指定字符串中的所有字符编码为一个字节序列
         /// </summary>
         /// <param name="value">包含要编码的字符的字符串</param>
@@ -491,12 +517,9 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (value));
             }
 
-            if ("".CompareTo (value) == 0)
-            {
-                return Array.Empty<byte> ();
-            }
-
-            return GetBytes (value, Encoding.UTF8);
+            return string.Compare ("", value, StringComparison.Ordinal) == 0
+                ? Array.Empty<byte> ()
+                : GetBytes (value, Encoding.UTF8);
         }
 
         /// <summary>
@@ -513,7 +536,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (value));
             }
 
-            if ("".CompareTo (value) == 0)
+            if (string.Compare ("", value, StringComparison.Ordinal) == 0)
             {
                 return Array.Empty<byte> ();
             }
@@ -571,6 +594,7 @@ namespace JieRuntime
                 Array.Reverse (bytes);
             }
         }
+
         // 转换格式化
         private static byte[] ConvertFormat (byte[] bytes, int len)
         {
