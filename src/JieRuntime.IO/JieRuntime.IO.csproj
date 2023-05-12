@@ -32,7 +32,7 @@
 		<None Include="Assets\Build\**" Pack="True" PackagePath="build\" />
 		<None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
 		<None Include="..\..\LOGO.jpg"  Pack="True" PackagePath="\" />
-		<None Include="..\..\README.md" Pack="True" PackagePath="\" />
+		<None Include="README.md" Pack="True" PackagePath="\" />
 	</ItemGroup>
 
 	<!--依赖配置-->
