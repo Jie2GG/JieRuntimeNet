@@ -244,9 +244,9 @@ namespace JieRuntime.Net.Sockets
                     throw new ArgumentNullException (nameof (data));
                 }
 
-                if (data.LongLength > this.PacketSize)
+                if (data.LongLength > (this.PacketSize - this.PacketHeaderLength))
                 {
-                    throw new ArgumentOutOfRangeException ($"要发送的数据包大小超过了上限: {this.PacketSize}", nameof (data));
+                    throw new ArgumentOutOfRangeException ($"要发送的数据包大小超过了上限: {this.PacketSize - this.PacketHeaderLength}", nameof (data));
                 }
 
                 try
@@ -261,7 +261,6 @@ namespace JieRuntime.Net.Sockets
 
                     // 发送数据
                     this.client?.BeginSend (buf, 0, buf.Length, SocketFlags.None, this.SendAsyncCallback, data);
-
                 }
                 catch (Exception e)
                 {
