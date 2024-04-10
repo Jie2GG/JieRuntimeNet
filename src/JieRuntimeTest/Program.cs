@@ -10,6 +10,10 @@ using System.Collections.ObjectModel;
 using JieRuntime;
 using JieRuntime.Hook;
 using JieRuntime.Ini;
+using System.Net;
+using JieRuntime.Net.Sockets.Tcp;
+using System.Threading;
+using JieRuntime.Net.Sockets.Udp;
 
 namespace JieRuntimeTest
 {
@@ -22,42 +26,61 @@ namespace JieRuntimeTest
 
         public static void Main ()
         {
-            //MessageBoxDelegate @delegate = new MessageBoxDelegate (Callback);
-            //MessageBoxA (IntPtr.Zero, "Test", "Test", MessageBoxOptions.MB_OK);
-            //byte[] buf = Program.ConvetToBinary (1);
-            //byte[] buf2 = BinaryConvert.GetBytes (1);
-            //byte[] buf3 = CombineOfArray (buf, buf2);
-            //Console.WriteLine ();
-
-            //Process process = Process.GetProcessById (10940);
-            //// 遍历模块
-            //foreach (ProcessModule processModule in process.Modules)
-            //{
-            //    if (string.Compare (processModule.ModuleName, "User32.dll", true) == 0)
-            //    {
-            //        // 获取模块的函数指针
-            //        IntPtr procAddress = Kernel32.GetProcAddress (processModule.BaseAddress, nameof (MessageBoxA));
-            //        if (procAddress != IntPtr.Zero)
-            //        {
-
-            //        }
-
-            //        break;
-            //    }
-            //}
-
-            //WindowsHook hook = new WindowsHook (2916);
-            //hook.Install ("user32.dll", nameof (MessageBoxA), @delegate);
-
-            IniConfiguration configuration = new IniConfiguration (@"D:\test.ini");
-            configuration.Load ();
-            configuration.Configuration["boos"]["key"] = 123;
-            Console.WriteLine ((int)configuration.Configuration["boos"]["key"]);
-            configuration.Save ();
+            //TcpOptions options = new TcpOptions ();
 
 
-            Console.Read ();
-            //MessageBoxA (IntPtr.Zero, "Test", "Test", MessageBoxOptions.MB_OK);
+            //TcpServer server = new TcpServer (IPAddress.Any, 8000, options);
+            //server.Started += (sender, e) => Console.WriteLine ($"[服务端] 启动, 监听地址: {server.ListenerPoint}");
+            //server.Stopped += (sender, e) => Console.WriteLine ($"[服务端] 停止");
+            //server.Exception += (sender, e) => Console.WriteLine ($"[服务端] 异常: {e.Exception}");
+            //server.ClientConnected += (sender, e) => Console.WriteLine ($"[服务端] 客户端已连接, 地址: {e.Client.RemoteEndPoint}");
+            //server.ClientDisconnected += (sender, e) => Console.WriteLine ($"[服务端] 客户端已断开, 地址: {e.Client.RemoteEndPoint}");
+            //server.ClientReceived += (sender, e) => Console.WriteLine ($"[服务端] 收到数据, 地址: {e.Client.RemoteEndPoint}, {BinaryConvert.ToHexString (e.Data)}");
+            //server.ClientSending += (sender, e) => Console.WriteLine ($"[服务端] 发送数据, 地址: {e.Client.RemoteEndPoint}, {BinaryConvert.ToHexString (e.Data)}");
+            //server.ClientException += (sender, e) => Console.WriteLine ($"[服务端] 客户端异常: {e.Exception}");
+            //server.Start ();
+            //Console.ReadLine ();
+
+            //TcpClient client = new TcpClient ();
+            //client.Connected += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 连接到 {client.RemoteEndPoint} 成功");
+            //client.Disconnected += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 断开连接");
+            //client.Exception += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 异常: {e.Exception}");
+            //client.Received += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 收到数据: {BinaryConvert.ToHexString (e.Data)}");
+            //client.Sending += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 发送数据: {BinaryConvert.ToHexString (e.Data)}");
+            //client.Connect (new IPEndPoint (IPAddress.Loopback, 8000));
+            //Thread.Sleep (1);
+            //client.Send (new byte[] { 1, 2, 34, 5, 6, 67, 8, 9, 0 });
+
+
+            //Console.ReadLine ();
+
+            //client.Disconnect (false);
+            //server.Stop ();
+
+            UdpServer server = new UdpServer (IPAddress.Any, 8000, new UdpOptions ());
+            server.Started += (sender, e) => Console.WriteLine ($"[服务端] 启动, 监听地址: {server.ListenerPoint}");
+            server.Stopped += (sender, e) => Console.WriteLine ($"[服务端] 停止");
+            server.Exception += (sender, e) => Console.WriteLine ($"[服务端] 异常: {e.Exception}");
+            server.ClientConnected += (sender, e) => Console.WriteLine ($"[服务端] 客户端已连接, 地址: {e.Client.RemoteEndPoint}");
+            server.ClientDisconnected += (sender, e) => Console.WriteLine ($"[服务端] 客户端已断开, 地址: {e.Client.RemoteEndPoint}");
+            server.ClientReceived += (sender, e) => Console.WriteLine ($"[服务端] 收到数据, 地址: {e.Client.RemoteEndPoint}, {BinaryConvert.ToHexString (e.Data)}");
+            server.ClientSending += (sender, e) => Console.WriteLine ($"[服务端] 发送数据, 地址: {e.Client.RemoteEndPoint}, {BinaryConvert.ToHexString (e.Data)}");
+            server.ClientException += (sender, e) => Console.WriteLine ($"[服务端] 客户端异常: {e.Exception}");
+            server.Start ();
+            Console.ReadLine ();
+            UdpClient client = new UdpClient ();
+            client.Connected += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 打开 {client.RemoteEndPoint} 连接");
+            client.Disconnected += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 关闭连接");
+            client.Received += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 收到数据: {BinaryConvert.ToHexString (e.Data)}");
+            client.Sending += (sender, e) => Console.WriteLine ($"[客户端] - {client.LocalEndPoint} 发送数据: {BinaryConvert.ToHexString (e.Data)}");
+            client.Connect (new IPEndPoint (IPAddress.Loopback, 8000));
+            Thread.Sleep (1);
+            client.Send (new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+
+            Console.ReadLine ();
+            client.Disconnect (true);
+            server.Stop ();
+
 
         }
 

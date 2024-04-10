@@ -3,9 +3,9 @@
 namespace JieRuntime.Net.Sockets
 {
     /// <summary>
-    /// 表示包含套接字异常事件数据的类
+    /// 表示包含套接字客户端异常事件数据的类
     /// </summary>
-    public class SocketExceptionEventArgs : SocketEventArgs
+    public class SocketClientExceptionEventArgs : SocketClientEventArgs
     {
         #region --属性--
         /// <summary>
@@ -16,11 +16,13 @@ namespace JieRuntime.Net.Sockets
 
         #region --构造函数--
         /// <summary>
-        /// 初始化 <see cref="SocketExceptionEventArgs"/> 类的新实例
+        /// 初始化 <see cref="SocketClientExceptionEventArgs"/> 类的新实例
         /// </summary>
+        /// <param name="client">套接字客户端</param>
         /// <param name="exception">引发此事件的异常</param>
         /// <exception cref="ArgumentNullException">参数: <paramref name="exception"/> 不能为 <see langword="null"/></exception>
-        public SocketExceptionEventArgs (Exception exception)
+        public SocketClientExceptionEventArgs (SocketClient client, Exception exception)
+            : base (client)
         {
             this.Exception = exception ?? throw new ArgumentNullException (nameof (exception));
         }
