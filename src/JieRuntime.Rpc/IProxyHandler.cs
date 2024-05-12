@@ -5,7 +5,7 @@ namespace JieRuntime.Rpc
     /// <summary>
     /// 表示远程调用服务代理接口
     /// </summary>
-    public interface IRpcServiceProxy
+    public interface IProxyHandler
     {
         /// <summary>
         /// 每当调用代理类型上的任何方法时，都会调用此方法

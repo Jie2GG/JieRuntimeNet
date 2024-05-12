@@ -7,7 +7,7 @@ namespace JieRuntime.Rpc.Extensions
     /// <summary>
     /// 提供一组 <see cref="BufferReader"/> 方法的扩展
     /// </summary>
-    internal static class BufferReaderExtension
+    static class BufferReaderExtension
     {
         /// <summary>
         /// 从流中指定位置开始, 读取短令牌数据

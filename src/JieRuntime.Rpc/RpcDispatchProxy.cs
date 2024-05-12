@@ -1,18 +1,17 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace JieRuntime.Rpc
 {
     /// <summary>
     /// 表示远程调用服务的代理类
     /// </summary>
-    public class RpcServiceProxy : DispatchProxy
+    public class RpcDispatchProxy : DispatchProxy
     {
         #region --属性--
         /// <summary>
         /// 获取或设置代理处理程序
         /// </summary>
-        public IRpcServiceProxy ProxyHandler { get; set; }
+        public IProxyHandler ProxyHandler { get; set; }
         #endregion
 
         #region --公开方法--

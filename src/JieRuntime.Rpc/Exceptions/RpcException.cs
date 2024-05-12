@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace JieRuntime.Rpc
+namespace JieRuntime.Rpc.Exceptions
 {
     /// <summary>
     /// 表示远程调用服务执行期间发生的错误

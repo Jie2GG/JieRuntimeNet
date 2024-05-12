@@ -7,7 +7,7 @@ namespace JieRuntime.Rpc.Extensions
     /// <summary>
     /// 提供一组 <see cref="BufferWriter"/> 方法的扩展
     /// </summary>
-    internal static class BufferWriterExtension
+    static class BufferWriterExtension
     {
         /// <summary>
         /// 将数据以短令牌的形式写入流的指定位置

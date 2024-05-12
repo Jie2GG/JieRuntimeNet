@@ -1,9 +1,6 @@
-﻿namespace JieRuntime.Rpc.Tcp.Messages
+﻿namespace JieRuntime.Rpc.Tcp.Packets
 {
-    /// <summary>
-    /// 表示消息类型的枚举
-    /// </summary>
-    internal enum MessageType : byte
+    enum MessageType
     {
         /// <summary>
         /// 请求

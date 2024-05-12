@@ -30,6 +30,9 @@
 	<!--资产配置-->
 	<ItemGroup>
 		<None Include="Assets\Build\**" Pack="True" PackagePath="build\" />
+		<Compile Remove="RpcBack\**" />
+		<EmbeddedResource Remove="RpcBack\**" />
+		<None Remove="RpcBack\**" />
 		<None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
 		<None Include="..\..\LOGO.jpg" Pack="True" PackagePath="\" />
 		<None Include="..\..\README.md" Pack="True" PackagePath="\" />
@@ -38,9 +41,9 @@
 	<!--依赖配置-->
 	<ItemGroup>
 		<!--NuGet-->
-		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.4" />
 		<PackageReference Include="System.Reflection.DispatchProxy" Version="4.7.1" />
-		<PackageReference Include="System.Text.Json" Version="7.0.0" />
+		<PackageReference Include="System.Text.Json" Version="8.0.3" />
 		<ProjectReference Include="..\JieRuntime.IO\JieRuntime.IO.csproj" />
 		<!--项目依赖-->
 		<ProjectReference Include="..\JieRuntime.Net\JieRuntime.Net.csproj" />
