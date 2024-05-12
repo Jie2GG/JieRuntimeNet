@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -16,6 +15,26 @@ namespace JieRuntime
 
         #region --公开方法--
         /// <summary>
+        /// 返回从字节数组中指定位置的字节转换来的 <see cref="bool"/> 值
+        /// </summary>
+        /// <param name="bytes">字节数组</param>
+        /// <param name="startIndex">从指定位置开始读取</param>
+        /// <param name="reverse">是否反转数组进行数据读取</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static bool ToBoolean (byte[] bytes, int startIndex, bool reverse = false)
+        {
+            if (bytes is null)
+            {
+                throw new ArgumentNullException (nameof (bytes));
+            }
+
+            bytes = ConvertFormat (bytes, startIndex, sizeof (ushort), reverse);
+            ConvertReverse (bytes, reverse);
+            return BitConverter.ToBoolean (bytes, startIndex);
+        }
+
+        /// <summary>
         /// 返回由字节数组中指定位置的两个字节转换来的 Unicode 字符
         /// </summary>
         /// <param name="bytes">指定数据存在的字节数组</param>
@@ -30,7 +49,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (ushort));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (ushort), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToChar (bytes, startIndex);
         }
@@ -50,7 +69,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (short));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (short), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToInt16 (bytes, startIndex);
         }
@@ -70,7 +89,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (ushort));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (ushort), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToUInt16 (bytes, startIndex);
         }
@@ -90,7 +109,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (int));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (int), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToInt32 (bytes, startIndex);
         }
@@ -110,7 +129,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (uint));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (uint), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToUInt32 (bytes, startIndex);
         }
@@ -130,7 +149,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (long));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (long), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToInt64 (bytes, startIndex);
         }
@@ -150,7 +169,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (ulong));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (ulong), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToUInt64 (bytes, startIndex);
         }
@@ -170,7 +189,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (float));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (float), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToSingle (bytes, startIndex);
         }
@@ -190,7 +209,7 @@ namespace JieRuntime
                 throw new ArgumentNullException (nameof (bytes));
             }
 
-            bytes = ConvertFormat (bytes, sizeof (double));
+            bytes = ConvertFormat (bytes, startIndex, sizeof (double), reverse);
             ConvertReverse (bytes, reverse);
             return BitConverter.ToDouble (bytes, startIndex);
         }
@@ -596,26 +615,29 @@ namespace JieRuntime
         }
 
         // 转换格式化
-        private static byte[] ConvertFormat (byte[] bytes, int len)
+        private static byte[] ConvertFormat (byte[] bytes, int startIndex, int len, bool reverse)
         {
-            if (bytes is null)
-            {
-                throw new ArgumentNullException (nameof (bytes));
-            }
+            byte[] temp = new byte[len];
 
-            if (len < 0)
+            if (bytes.Length - startIndex < len)
             {
-                len = 0;
+                int copyLen = len - (len - (bytes.Length - startIndex));
+                if (reverse)
+                {
+                    // 大端序, 缺字节, 左侧补0
+                    Array.Copy (bytes, startIndex, temp, len - copyLen, copyLen);
+                }
+                else
+                {
+                    // 小端序, 缺字节, 右侧补0
+                    Array.Copy (bytes, startIndex, temp, 0, copyLen);
+                }
             }
-
-            if (bytes.Length < len)
+            else
             {
-                byte[] temp = new byte[len];
-                Array.Copy (bytes, 0, temp, len - bytes.Length, bytes.Length);
-                return temp;
+                Array.Copy (bytes, startIndex, temp, 0, temp.Length);
             }
-
-            return bytes;
+            return temp;
         }
         #endregion
     }
