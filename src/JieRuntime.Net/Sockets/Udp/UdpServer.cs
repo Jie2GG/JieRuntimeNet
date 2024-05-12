@@ -21,7 +21,14 @@ namespace JieRuntime.Net.Sockets.Udp
         #endregion
 
         #region --属性--
+        /// <summary>
+        /// 获取一个 <see cref="bool"/> 值, 指示当前服务端是否正在运行
+        /// </summary>
         public override bool IsRunning => this.isRunning;
+
+        /// <summary>
+        /// 获取当前服务端的客户端列表
+        /// </summary>
         public override IReadOnlyCollection<UdpClient> Clients => this.clients;
         #endregion
 

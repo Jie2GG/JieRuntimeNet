@@ -208,15 +208,15 @@ namespace JieRuntime.Net.Sockets.Tcp
                 try
                 {
                     // 计算封包包头
-                    byte[] lenBytes = BinaryConvert.GetBytes (data.Length + this.options.PacketHeaderBytesSize, true);
+                    byte[] len = BinaryConvert.GetBytes (data.Length + this.options.PacketHeaderBytesSize, true);
 
                     // 填充包头
-                    byte[] buf = lenBytes
+                    byte[] buf = len
                         .Right (this.options.PacketHeaderBytesSize)    // 从右取指定长度的包头
                         .Concat (data);                                 // 连接要发送的数据
 
                     // 发送数据
-                    this.client?.BeginSend (buf, 0, buf.Length, SocketFlags.None, this.SocketSendAsyncCallback, data);
+                    this.client?.BeginSend (buf, 0, buf.Length, SocketFlags.None, this.SocketSendAsyncCallback, buf);
                 }
                 catch (Exception e)
                 {
