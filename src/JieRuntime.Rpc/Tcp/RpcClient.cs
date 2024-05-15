@@ -179,7 +179,11 @@ namespace JieRuntime.Rpc.Tcp
                     // 检查返回值是否为异常信息，如果是则抛出异常
                     if (response.Error is not null)
                     {
-                        throw new JsonRpcException (response.Error);
+                        if (response.Error.Data is JsonElement element)
+                        {
+                            response.Error.Data = element.Deserialize<JsonRpcExceptionData> (DefualtSerializerOptions);
+                            throw new JsonRpcException (response.Error);
+                        }
                     }
                     else
                     {

@@ -3,7 +3,7 @@
 namespace JieRuntime.Rpc.Tcp.Messages
 {
    class JsonRpcExceptionData
-    {
+   {
         public string Source { get; set; }
 
         public string Message { get; set; }
