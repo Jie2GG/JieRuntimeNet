@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 using JieRuntime.Rpc.Attributes;
 using JieRuntime.Rpc.Tcp;
@@ -9,13 +10,21 @@ namespace JieRuntimeTest
     {
         public static void Main ()
         {
-            RpcServer server = new (8000);
-            server.Register<IService> (new Service ());
-            server.ClientConnected += (sender, e) =>
+            //RpcServer server = new (8000);
+            //server.Register<IService> (new Service ());
+            //server.ClientConnected += (sender, e) =>
+            //{
+            //    Console.WriteLine ("Client connected");
+            //};
+            //server.Start ();
+
+            RpcClient client = new (new IPEndPoint (IPAddress.Loopback, 8000));
+            client.Connected += (sender, e) =>
             {
-                Console.WriteLine ("Client connected");
+                IService service = client.Resolver<IService> ();
+                service.Hello (1, 2, "3");
             };
-            server.Start ();
+            client.Connect ();
 
             Console.Read ();
         }

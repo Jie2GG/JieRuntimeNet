@@ -224,6 +224,10 @@ namespace JieRuntime.Rpc.Tcp
             {
                 throw;
             }
+            catch (RpcException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
                 this.InvokeExceptionEvent (e);
