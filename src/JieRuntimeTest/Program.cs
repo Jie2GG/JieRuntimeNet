@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 
+using JieRuntime.Ini;
 using JieRuntime.Rpc.Attributes;
 using JieRuntime.Rpc.Tcp;
 
@@ -10,22 +11,8 @@ namespace JieRuntimeTest
     {
         public static void Main ()
         {
-            RpcServer server = new (8000);
-            server.Register<IService> (new Service ());
-            server.ClientConnected += (sender, e) =>
-            {
-                Console.WriteLine ("Client connected");
-            };
-            server.Start ();
-
-            RpcClient client = new (new IPEndPoint (IPAddress.Loopback, 8000));
-            client.Connected += (sender, e) =>
-            {
-                IService service = client.Resolver<IService> ();
-                service.Hello (1, 2, "3");
-            };
-            //client.Register<IService> (new Service ());
-            client.Connect ();
+            IniConfiguration config = new($@"D:\Csharp\ChattyBot\ChattyBot.Client\bin\x86\Debug\net8.0-windows\data\10000\config.ini");
+            bool? value = config.Configuration["AppStatus"]["com.chattybot.demo"];
 
             Console.Read ();
         }

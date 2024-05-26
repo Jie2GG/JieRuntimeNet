@@ -320,9 +320,9 @@ namespace JieRuntime.Ini
                 throw new ArgumentException ("无法转换为 Boolean 类型");
             }
 
-            if (this.Value is BigInteger v2)
+            if (this.Value is BigInteger v1)
             {
-                return Convert.ToBoolean (v2, provider);
+                return Convert.ToBoolean (v1, provider);
             }
 
             return Convert.ToBoolean (this.Value, provider);
@@ -349,9 +349,9 @@ namespace JieRuntime.Ini
                 throw new ArgumentException ("无法转换为 Char 类型");
             }
 
-            if (this.Value is BigInteger v2)
+            if (this.Value is BigInteger v1)
             {
-                return (char)(ushort)v2;
+                return (char)(ushort)v1;
             }
 
             return Convert.ToChar (this.Value, provider);
@@ -2040,7 +2040,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator bool? (IniValue value)
         {
-            return new bool? (value);
+            if (value is null)
+            {
+                return null;
+            }    
+            return value;
         }
 
         /// <summary>
@@ -2049,7 +2053,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator sbyte? (IniValue value)
         {
-            return new sbyte? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2058,7 +2066,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator byte? (IniValue value)
         {
-            return new byte? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2067,7 +2079,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator char? (IniValue value)
         {
-            return new char? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2076,7 +2092,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator short? (IniValue value)
         {
-            return new short? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2085,7 +2105,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator ushort? (IniValue value)
         {
-            return new ushort? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2094,7 +2118,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator int? (IniValue value)
         {
-            return new int? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2103,7 +2131,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator uint? (IniValue value)
         {
-            return new uint? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2112,7 +2144,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator long? (IniValue value)
         {
-            return new long? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2121,7 +2157,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator ulong? (IniValue value)
         {
-            return new ulong? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2130,7 +2170,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator float? (IniValue value)
         {
-            return new float? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2139,7 +2183,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator double? (IniValue value)
         {
-            return new double? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2148,7 +2196,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator decimal? (IniValue value)
         {
-            return new decimal? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2157,7 +2209,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator DateTime? (IniValue value)
         {
-            return new DateTime? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2166,7 +2222,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator DateTimeOffset? (IniValue value)
         {
-            return new DateTimeOffset? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2175,7 +2235,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator TimeSpan? (IniValue value)
         {
-            return new TimeSpan? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value;
         }
 
         /// <summary>
@@ -2184,7 +2248,11 @@ namespace JieRuntime.Ini
         /// <param name="value">转换的 <see cref="IniValue"/> 对象</param>
         public static implicit operator Guid? (IniValue value)
         {
-            return new Guid? (value);
+            if (value is null)
+            {
+                return null;
+            }
+            return value; ;
         }
         #endregion
     }
