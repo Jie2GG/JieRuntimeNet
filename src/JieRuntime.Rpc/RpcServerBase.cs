@@ -58,6 +58,45 @@ namespace JieRuntime.Rpc
         public abstract void Stop ();
 
         /// <summary>
+        /// 注册远程调用服务实例
+        /// </summary>
+        /// <param name="type">远程调用服务实例接口的类型</param>
+        /// <param name="obj">远程服务调用实例</param>
+        public override void Register (Type type, object obj)
+        {
+            // 先执行父方法的注册逻辑
+            base.Register (type, obj);
+
+            // 补充注册, 防止在客户端已连接后再注册导致客户端无法调用服务端的远程服务
+            foreach (TClient client in this.Clients)
+            {
+                if (!client.IsRegister (type))
+                {
+                    client.Register (type, obj);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 取消注册远程调用服务实例
+        /// </summary>
+        /// <param name="type">远程调用服务实例接口的类型</param>
+        public override void Unregister (Type type)
+        {
+            // 先执行父方法的取消注册逻辑
+            base.Unregister (type);
+
+            // 补充取消注册, 防止客户端还能继续调用已取消注册的远程服务
+            foreach (TClient client in this.Clients)
+            {
+                if (client.IsRegister (type))
+                {
+                    client.Unregister (type);
+                }
+            }
+        }
+
+        /// <summary>
         /// 解析远程服务指定接口的代理
         /// </summary>
         /// <typeparam name="T">远程服务调用的接口</typeparam>

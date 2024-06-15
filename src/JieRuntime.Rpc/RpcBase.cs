@@ -94,8 +94,7 @@ namespace JieRuntime.Rpc
         /// <summary>
         /// 取消注册远程调用服务实例
         /// </summary>
-        /// <typeparam name="T">远程调用服务实例接口的类</typeparam>
-        /// <exception cref="ArgumentException"></exception>
+        /// <typeparam name="T">远程调用服务实例接口的类型</typeparam>
         public virtual void Unregister<T> ()
             where T : class
         {
@@ -135,6 +134,50 @@ namespace JieRuntime.Rpc
                 {
                     this.Services.Remove (type.Name);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 获取指定的远程调用服务实例接口的类型是否在服务列表中注册
+        /// </summary>
+        /// <typeparam name="T">远程调用服务实例接口的类型</typeparam>
+        /// <returns>如果在服务实例列表中已注册则为 <see langword="true"/>; 否则为 <see langword="false"/></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public virtual bool IsRegister<T> ()
+            where T : class
+        {
+            return this.IsRegister (typeof (T));
+        }
+
+        /// <summary>
+        /// 获取指定的远程调用服务实例接口的类型是否在服务列表中注册
+        /// </summary>
+        /// <param name="type">远程调用服务实例接口的类型</param>
+        /// <returns>如果在服务实例列表中已注册则为 <see langword="true"/>; 否则为 <see langword="false"/></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public virtual bool IsRegister (Type type)
+        {
+            if (type is null)
+            {
+                throw new ArgumentNullException (nameof (type));
+            }
+
+            if (!type.IsInterface)
+            {
+                throw new ArgumentException ($"类型 {type.FullName} 不是接口类型");
+            }
+
+            // 检查是否存在远程类型特性, 如果存在则注册为指定名称的服务
+            RemoteTypeAttribute remoteType = type.GetCustomAttribute<RemoteTypeAttribute> ();
+            if (remoteType is not null)
+            {
+                return this.Services.ContainsKey (remoteType.Name);
+            }
+            else
+            {
+                return this.Services.ContainsKey (type.Name);
             }
         }
 

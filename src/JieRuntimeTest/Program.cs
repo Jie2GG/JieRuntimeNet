@@ -11,9 +11,19 @@ namespace JieRuntimeTest
     {
         public static void Main ()
         {
-            IniConfiguration config = new (@"D:\Csharp\ChattyBot\ChattyBot.Client\bin\x86\Debug\net8.0-windows\data\10000\config.ini");
-            config.Load ();
-            bool? value = config.Configuration["AppStatus"]["com.chattybot.demo"];
+            //IniConfiguration config = new (@"D:\Csharp\ChattyBot\ChattyBot.Client\bin\x86\Debug\net8.0-windows\data\10000\config.ini");
+            //config.Load ();
+            //bool? value = config.Configuration["AppStatus"]["com.chattybot.demo"];
+
+            RpcServer server = new (8023);
+            server.Start ();
+            server.ClientConnected += (sender, e) =>
+            {
+                server.Register<IService> (new Service ());
+            };
+
+            RpcClient client = new (new IPEndPoint (IPAddress.Loopback, 8023));
+            client.Connect ();
 
             Console.Read ();
         }
